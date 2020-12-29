@@ -28,28 +28,24 @@ int main()
 //child process will write to the the second pipe and read from the first pipe 
 	if(pd!=0)
 	{
-		close(pipefds1[1]); //don't write to the first pipe
-		close(pipefds2[0]); //don't read from the second pipe
+		close(pipefds1[0]); //don't write to the first pipe
+		close(pipefds2[1]); //don't read from the second pipe
 
 		//reading from the first pipe
-
+		printf("Parent: message written to the pipe1 : %s\n",message1);
 		write(pipefds1[1],message1, sizeof(message1));
 		read(pipefds2[0],readMess2,sizeof(readMess2));
-
-		printf("Parent: message written to the pipe2 : %s\n",message1);
-		printf("Parent: message read from the pipe 1 : %s\n",readMess2);
+		printf("Parent: message read from the pipe2 : %s\n",readMess2);
 
 	}
 	else
 	{
-		close(pipefds1[0]); //don't write to the second pipe
-		close(pipefds2[1]); //don't read from the first pipe
-
-		write(pipefds2[1],message2, sizeof(message2));
+		close(pipefds1[1]); //don't write to the second pipe
+		close(pipefds2[0]); //don't read from the first pipe
 		read(pipefds1[0],readMess1, sizeof(readMess1));
-
+		printf("Child: message read from the pipe1 : %s\n",readMess1);
 		printf("Child: message written to the pipe2 : %s\n",message2);
-		printf("Child: message read from the pipe 1 : %s\n",readMess1);
+		write(pipefds2[1],message2, sizeof(message2));
 
 	}
 
